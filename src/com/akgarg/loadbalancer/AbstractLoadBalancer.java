@@ -36,11 +36,24 @@ public abstract class AbstractLoadBalancer implements LoadBalancer {
         this.serviceMap.remove(requestType, loadBalancerService);
     }
 
+    @Override
+    public LoadBalancerService getService(final RequestType requestType) throws LoadBalancerException {
+        LoadBalancerUtils.validateRequestType(requestType);
+
+        final var service = this.serviceMap.get(requestType);
+
+        if (service == null) {
+            throw new LoadBalancerException("No service is serving requests of type: " + requestType);
+        }
+
+        return service;
+    }
+
     /**
      * Method to get the all available servers available to handle request
      *
      * @param request request to balance
-     * @return {@link Set< DefaultServerImpl >} collection of servers
+     * @return {@link Set<DefaultServerImpl>} collection of servers
      */
     protected Set<LoadBalancerServer> getDestinationServersForRequest(final Request request) {
         final LoadBalancerService loadBalancerService = this.serviceMap.get(request.getRequestType());

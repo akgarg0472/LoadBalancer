@@ -41,4 +41,13 @@ public interface LoadBalancer {
             final LoadBalancerService loadBalancerService
     ) throws LoadBalancerException;
 
+    /**
+     * Method to get service handling the specific request type
+     *
+     * @param requestType type of request
+     * @return {@link LoadBalancerService} serving requests of provided requestType
+     * @throws LoadBalancerException if param is null or no service is serving requests for given type
+     */
+    LoadBalancerService getService(final RequestType requestType) throws LoadBalancerException;
+
 }

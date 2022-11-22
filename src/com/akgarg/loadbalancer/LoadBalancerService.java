@@ -3,7 +3,7 @@ package com.akgarg.loadbalancer;
 import java.util.Set;
 
 /**
- * Defines the service used to manage servers for a type of request
+ * Defines the service used to manage servers for a particular type of request
  *
  * @author Akhilesh Garg
  * @since 03-11-2022
@@ -28,7 +28,7 @@ public interface LoadBalancerService {
     void removeServer(final LoadBalancerServer server) throws LoadBalancerException;
 
     /**
-     * Method to get the collection of servers
+     * Method to get the collection of servers serving requests
      *
      * @return {@link Set<LoadBalancerServer>} collection of servers
      */

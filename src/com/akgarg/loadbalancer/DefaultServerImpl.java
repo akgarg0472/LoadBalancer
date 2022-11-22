@@ -15,6 +15,7 @@ public class DefaultServerImpl implements LoadBalancerServer {
     private final String ipAddress;
     private final Random random;
     private int requestsBeingServed;
+    private int totalRequestsServed;
 
     public DefaultServerImpl(final int threshold, final String id, final int port, final String ipAddress) {
         this.threshold = threshold;
@@ -25,13 +26,15 @@ public class DefaultServerImpl implements LoadBalancerServer {
     }
 
     @Override
-    public void serveRequest(final Request request) {
+    public void serveRequest(final Request request) throws LoadBalancerException {
+        LoadBalancerUtils.validateRequest(request);
+
         if (this.requestsBeingServed < this.threshold) {
             this.requestsBeingServed++;
 
             // request processing logic
             new Thread(() -> {
-                System.out.println(getServerDetails() + " accepts the request: " + request);
+                System.out.println(getServerDetails() + " accepts the request: " + request.getId());
 
                 request.setStartTimestamp(System.currentTimeMillis());
 
@@ -51,7 +54,7 @@ public class DefaultServerImpl implements LoadBalancerServer {
 
     @Override
     public String getServerDetails() {
-        return "DefaultServerImpl" + this.id + "@" + this.ipAddress + ":" + this.port;
+        return "Server-" + this.id + "@" + this.ipAddress + ":" + this.port;
     }
 
     @Override
@@ -79,11 +82,17 @@ public class DefaultServerImpl implements LoadBalancerServer {
         return ipAddress;
     }
 
+    @Override
+    public int getTotalServedRequestsCount() {
+        return this.totalRequestsServed;
+    }
+
     private void completeRequest(final Request request) {
         this.requestsBeingServed--;
-        System.out.println(getServerDetails() + " finished the processing of request: " + request);
+        this.totalRequestsServed++;
         request.setEndTimestamp(System.currentTimeMillis());
-        System.out.println(getServerDetails() + " took " + (request.getEndTimestamp() - request.getStartTimestamp()) + " ms to execute request: " + request);
+        final long duration = request.getEndTimestamp() - request.getStartTimestamp();
+        System.out.println(getServerDetails() + " processed {" + request + "} in " + duration + "ms");
     }
 
 }

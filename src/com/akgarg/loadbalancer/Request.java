@@ -22,7 +22,7 @@ public class Request {
     private long endTimestamp;
 
     public Request(final RequestType requestType, final String url, final Map<String, String> params) {
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString().split("-")[0];
         this.requestType = requestType;
         this.url = url;
         this.params = params;

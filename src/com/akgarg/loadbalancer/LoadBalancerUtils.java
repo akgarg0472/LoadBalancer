@@ -7,7 +7,7 @@ package com.akgarg.loadbalancer;
  * @since 03-11-2022
  */
 @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "unused"})
-public class LoadBalancerUtils {
+class LoadBalancerUtils {
 
     private LoadBalancerUtils() {
     }
